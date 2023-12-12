@@ -21,6 +21,7 @@ const AddEditMealForm: React.FC<AddEditMealFormProps> = ({addMeal}) => {
       calories: 0
     }
   );
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {id} = useParams();
 
@@ -38,6 +39,8 @@ const AddEditMealForm: React.FC<AddEditMealFormProps> = ({addMeal}) => {
       }
     } catch (error) {
       console.error('Error fetch meal for edit:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -54,11 +57,16 @@ const AddEditMealForm: React.FC<AddEditMealFormProps> = ({addMeal}) => {
       navigate('/');
     } catch (error) {
       console.error('Error submit meal:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="ms-3 mt-3 w-25">
+      {loading && <p className="text-center">Loading...</p>}
+      {!loading && (
+        <>
       <h5 className="mb-3">{id ? 'Редактировать' : 'Добавить'} Прием пищи</h5>
       <select className="form-select"
               value={meal.mealType}
@@ -79,7 +87,7 @@ const AddEditMealForm: React.FC<AddEditMealFormProps> = ({addMeal}) => {
                     ...meal,
                     description: e.target.value
                   })}
-      >
+                >
       </textarea>
       <div>
         <p className="mt-3">Калории</p>
@@ -94,6 +102,8 @@ const AddEditMealForm: React.FC<AddEditMealFormProps> = ({addMeal}) => {
       <button className="mt-3 btn btn-primary" onClick={handleSubmit}>
         Сохранить
       </button>
+        </>
+      )}
     </div>
   );
 };
