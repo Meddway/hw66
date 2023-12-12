@@ -34,6 +34,15 @@ const Home: React.FC = () => {
     return localMeals.reduce((total, meal) => total + meal.calories, 0);
   };
 
+  const handleDeleteMeal = async (id: string) => {
+    try {
+      await axiosApi.delete(`/meals/${id}.json`);
+      setLocalMeals((prevMeals) => prevMeals.filter((meal) => meal.id !== id));
+    } catch (error) {
+      console.error('Error delete meal:', error);
+    }
+  };
+
   return (
     <div>
       <h2 className="ms-5">Meals</h2>
@@ -52,7 +61,7 @@ const Home: React.FC = () => {
                 <p className="border">Description: {meal.description}</p>
                 <p className="border text-danger">Calories: {meal.calories}</p>
                 <button className="btn btn-primary me-3"><Link to={`/pages/edit-meal/${meal.id}`}/>Edit</button>
-                <button className="btn btn-danger">Delete</button>
+                <button className="btn btn-danger" onClick={() => handleDeleteMeal(meal.id)}>Delete</button>
               </div>
             </li>
           ))}
